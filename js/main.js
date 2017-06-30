@@ -9,6 +9,8 @@
   var startTime;
   var elapsedTime = 0;
   var timerId;
+  var last_elapsedTime = 0;
+  var isRunning = false;
 
   function updateTimerText() {
     var min = Math.floor(elapsedTime / 60000);
@@ -25,7 +27,7 @@
 
   function countUp() {
     timerId = setTimeout(function() {
-      elapsedTime = Date.now() - startTime;
+      elapsedTime = Date.now() - startTime + last_elapsedTime;
       updateTimerText();
       countUp();
     }, 10);
@@ -33,18 +35,31 @@
 
   // startボタンの処理
   start.addEventListener('click', function() {
+    if (isRunning) {
+      return false;
+    }
     startTime = Date.now();
+    isRunning = true;
     countUp();
   });
 
   // stopボタンの処理
   stop.addEventListener('click', function() {
+    if (isRunning === false) {
+      return false;
+    }
     clearTimeout(timerId);
+    last_elapsedTime += Date.now() - startTime;
+    isRunning = false;
   });
 
   // resetボタンの処理
   reset.addEventListener('click', function() {
+    if (isRunning) {
+      return false;
+    }
     elapsedTime = 0;
-    updateTimerText();cd
+    last_elapsedTime = 0;
+    updateTimerText();
   });
 })();
