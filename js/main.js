@@ -33,6 +33,14 @@
     }, 10);
   };
 
+  function updateButtonState(startButtonState, stopButtonState, resetButtonState) {
+    start.className = startButtonState ? 'btn' : 'btn disabled';
+    stop.className = stopButtonState ? 'btn' : 'btn disabled';
+    reset.className = resetButtonState ? 'btn' : 'btn disabled';
+  }
+
+  updateButtonState(true, false, false);
+
   // startボタンの処理
   start.addEventListener('click', function() {
     if (isRunning) {
@@ -40,6 +48,7 @@
     }
     startTime = Date.now();
     isRunning = true;
+    updateButtonState(false, true, false);
     countUp();
   });
 
@@ -51,6 +60,7 @@
     clearTimeout(timerId);
     last_elapsedTime += Date.now() - startTime;
     isRunning = false;
+    updateButtonState(true, false, true)
   });
 
   // resetボタンの処理
@@ -61,5 +71,6 @@
     elapsedTime = 0;
     last_elapsedTime = 0;
     updateTimerText();
+    updateButtonState(true, false, false);
   });
 })();
